@@ -10,7 +10,6 @@ void clearScreen () {
     cout << "\033[H\033[2J";
 }
 
-
 const unsigned KReset   (0);
 const unsigned KNoir    (40);
 const unsigned KRouge   (41);
@@ -21,6 +20,9 @@ const unsigned KMAgenta (45);
 const unsigned KCyan    (46);
 const unsigned int KNbCandies = 6;
 const unsigned Kimpossible = 0;
+int coup = 0;
+int score = 0;
+
 
 int test = 1;
 typedef vector <unsigned> line; // un type représentant une ligne de la grille
@@ -50,7 +52,7 @@ void initGrid(mat &grid, size_t matSize) {
     }
 }
 
-
+/*
 void  displayGrid (const mat & grid){
     clearScreen ();
     couleur(KReset);
@@ -58,15 +60,39 @@ void  displayGrid (const mat & grid){
     for (size_t x = 0; x < grid.size(); ++x) {
         for (size_t y = 0; y < grid[x].size(); ++y) {
             if(grid[x][y] <= 0 or grid[x][y] > KNbCandies){
-                cout<<"|   ";
+                cout<<"    ";
             }else{
-                cout<<"|";
+                cout<<"";
                 couleur (couleurs[grid[x][y]]);
                 cout<<" "<<grid[x][y]<<" ";
                 couleur (KReset);
             }
         }
-        cout<<"|"<<endl;
+        cout<<endl;
+    }
+}
+*/
+
+void  displayGrid (const mat & grid , maposition & pos){
+    clearScreen ();
+    couleur(KReset);
+    vector<unsigned> couleurs ={KNoir,KRouge,KVert,KJaune,KBleu,KMAgenta,KCyan};
+    for (size_t x = 0; x < grid.size(); ++x) {
+        for (size_t y = 0; y < grid[x].size(); ++y) {
+            if(grid[x][y] <= 0 or grid[x][y] > KNbCandies){
+                cout<<"  / ";
+            }else{
+                cout<<" ";
+                couleur (couleurs[grid[x][y]]);
+                if(pos.ord==x and pos.abs==y){
+                   cout<<"["<<grid[x][y]<<"]";
+                }else{
+                cout<<" "<<grid[x][y]<<" ";
+                }
+                couleur (KReset);
+            }
+        }
+        cout<<endl;
     }
 }
 
@@ -74,13 +100,13 @@ void makeAMove (mat & grid, const maposition & pos, const char & direction){
 
     if (pos.abs >= 0 && pos.abs < grid.size() && pos.ord >= 0 && pos.ord < grid[pos.abs].size()){
 
-        if(tolower(direction) == 's' && pos.ord < grid.size() - 1){swap(grid[pos.ord][pos.abs],grid[pos.ord + 1][pos.abs]);
+        if(tolower(direction) == 's' && pos.ord < grid.size() - 1){ ++coup; swap(grid[pos.ord][pos.abs],grid[pos.ord + 1][pos.abs]);
 
-        }else if(tolower(direction) == 'z' && pos.ord > 0){ swap(grid[pos.ord][pos.abs],grid[pos.ord - 1][pos.abs]);
+        }else if(tolower(direction) == 'z' && pos.ord > 0){ ++coup; swap(grid[pos.ord][pos.abs],grid[pos.ord - 1][pos.abs]);
 
-        }else if(tolower(direction) == 'a' && pos.abs > 0){ swap(grid[pos.ord][pos.abs],grid[pos.ord][pos.abs - 1]);
+        }else if(tolower(direction) == 'a' && pos.abs > 0){ ++coup; swap(grid[pos.ord][pos.abs],grid[pos.ord][pos.abs - 1]);
 
-        }else if(tolower(direction) == 'e' && pos.abs < grid.size()-1){ swap(grid[pos.ord][pos.abs],grid[pos.ord][pos.abs + 1]);
+        }else if(tolower(direction) == 'e' && pos.abs < grid.size()-1){ ++coup; swap(grid[pos.ord][pos.abs],grid[pos.ord][pos.abs + 1]);
 
         }else{
             cout<<"key error"<<endl;
@@ -135,13 +161,14 @@ bool atLeastThreeInARow(const mat &grid, maposition &pos, unsigned &howMany) {
 void removalInColumn (mat & grid, const maposition & pos, unsigned  howMany){
     size_t y;
     for(size_t i = 0; i < howMany; ++i){
-        y = pos.ord + i;
+        y = pos.ord;
         grid[y][pos.abs] = Kimpossible;
         while(true){
             if(y + 1 >= grid.size() or grid[y + 1][pos.abs] == 0) break;
             swap(grid[y][pos.abs],grid[y+1][pos.abs]);
             ++y;
         }
+        ++score;
     }
 }
 
@@ -184,23 +211,22 @@ int main(){
     }
 
     initGrid(grid,taille);
-
-    int coupMax = taille*taille;
+    const int KmaxTimes = (taille*taille)/3;
 
     maposition pos;
     unsigned howMany;
     char moveInstr;
 
-    while(coupMax != 0){
+    while(KmaxTimes >= coup){
 
-        displayGrid(grid);
+        displayGrid(grid,pos);
 
-        menu("coup : "+to_string(coupMax));
+        menu("coup : "+to_string(coup)+"/"+to_string(KmaxTimes)+"   score:"+to_string(score));
 
-        menu("veuillez selectionner une abcisse");
+        menu("veuillez selectionner une abscisse");
         cin >>pos.abs;
 
-        menu("veuillez selectionner une abcisse");
+        menu("veuillez selectionner une ordonnée");
         cin >>pos.ord;
 
         pos.ord -= 1;
@@ -211,10 +237,8 @@ int main(){
 
         makeAMove(grid,pos,moveInstr);
 
-        while(atLeastThreeInARow(grid,pos,howMany) or atLeastThreeInAColumn(grid,pos,howMany)){
-            if(atLeastThreeInARow(grid,pos,howMany)) removalInRow(grid,pos,howMany);
-            if(atLeastThreeInAColumn(grid,pos,howMany)) removalInColumn(grid,pos,howMany);
-        }
+        if(atLeastThreeInARow(grid,pos,howMany)) removalInRow(grid,pos,howMany);
+        if(atLeastThreeInAColumn(grid,pos,howMany)) removalInColumn(grid,pos,howMany);
 
     }
     return 0;
