@@ -23,7 +23,7 @@ const unsigned int KNbCandies = 6;
 const unsigned Kimpossible = 0;
 int coup = 0;
 int score = 0;
-
+bool infinite = false;
 
 int test = 1;
 typedef vector <unsigned> line; // un type représentant une ligne de la grille
@@ -123,17 +123,6 @@ void makeAMove (mat & grid, const maposition & pos, const char & direction){
         this_thread::sleep_for(chrono::seconds(2));
     }
 }
-void ChangePosWidthKeyboard(mat & grid, maposition & pos){
-    while(true){
-        char keyboardChar = getchar();
-        if(keyboardChar =='/') break;
-        if(keyboardChar =='z') --pos.ord;
-        if(keyboardChar =='s') ++pos.ord;
-        if(keyboardChar =='a') --pos.abs;
-        if(keyboardChar =='e') ++pos.abs;
-        displayGrid(grid,pos);
-    }
-}
 
 bool atLeastThreeInAColumn(const mat &grid, maposition &pos, unsigned &howMany) {
     for (size_t x = 0; x < grid.size(); ++x) {
@@ -195,49 +184,76 @@ void removalInRow (mat & grid, const maposition & pos, unsigned  howMany){
     }
 }
 
-void BoiteMessage(const string & texte){
-    cout<<"#";
-    for(size_t i = 0; i < texte.size();++i){
+void BoiteMessage(const string & texte,const string & title,size_t size){
+    if(size == 0)size = texte.size();
+    cout<<"#="<<title;
+    for(size_t i = 0; i < size-title.size()-1;++i){
         cout<<"=";
     }
     cout<<"#"<<endl<<"|";
     cout<<texte<<"|"<<endl;
     cout<<"#";
-    for(size_t i = 0; i < texte.size();++i){
+    for(size_t i = 0; i < size;++i){
         cout<<"=";
     }
     cout<<"#"<<endl;
 }
 
+void completeGrid(mat & grid){
+    srand(time(0));
+    for (size_t x = 0; x < grid.size(); ++x) {
+        for (size_t y = 0; y < grid.size(); ++y) {
+            if(grid[x][y]==0){
+            grid[x][y] = rand() % KNbCandies + 1;
+            }
+        }
+    }
+}
+
+
 int main(){
-    BoiteMessage("\tCANDYCROUS\n|\n|\tfait par\n|\tJimmy LEFEVBRE et Lilian CHEVREMONT \n|\n|\tbonne partie\t\t\tsae 1.01");
+    BoiteMessage("\tfait par\n|\tJimmy LEFEVBRE et Lilian CHEVREMONT \n|\n|\tbonne partie\t\tsae 1.01\n","CANDYcrous",45);
     this_thread::sleep_for(chrono::seconds(2));
 
     //création de la grille
     mat grid;
     size_t taille = 0;
     int Mode=0;
-    int Times;
+    int Times = 0;
 
     while (true) {
         clearScreen();
-        BoiteMessage("\n\tCANDYCROUS\n\n\tchoisissez votre difficultee\n\t1 - FACILE\n\t2 - NORMAL\n\t3 - DIFFICILE\t");
+        BoiteMessage("\n|\tchoisissez votre difficultee\n|\t1 - FACILE\n|\t2 - NORMAL\n|\t3 - DIFFICILE\t\n|\t4 - pour un rappel des regles\t\n","Menu",39);
         cin>>Mode;
-        if(Mode == 1){
-            taille = 5;
+        if(Mode == 4){
+            BoiteMessage("les règles sont simple\n\ttout d'abord vous devez choisir votre mode de jeux\n\tensuite vous verrez une grille de chiffre colorés\n\tceux-ci peuvent disparaitre lorsque vous en aligné 3 ou plus, lorsque vous les faites disparaitre vous gagnez des points\n\tvotre objectif et d'obtenir le score le plus haut, bonne partie!\n","CANDYcrous",40);
+            this_thread::sleep_for(chrono::seconds(3));
+        }else if(Mode == 1){
+            taille = 6;
             Times = (taille*taille)/3;
             break;
         }else if(Mode == 2){
-            taille = 10;
+            taille = 12;
             Times = (taille*taille)/4;
             break;
         }else if(Mode == 3){
-            taille = 20;
+            taille = 24;
             Times = (taille*taille)/10;
             break;
         }
     }
 
+    while (true) {
+        clearScreen();
+        BoiteMessage("\n|\tchoisissez votre mode de jeux\n|\t1 - NORMAL\n|\t2 - INFINI\n|\n","Menu",39);
+        cin>>Mode;
+        if(Mode == 1){
+            break;
+        }else if(Mode == 2){
+            infinite = true;
+            break;
+        }
+    }
 
     initGrid(grid,taille);
     const int KmaxTimes = Times;
@@ -247,31 +263,37 @@ int main(){
     pos.ord=0;
     unsigned howMany;
     char moveInstr;
-
     while(KmaxTimes >= coup){
 
         displayGrid(grid,pos);
 
-        BoiteMessage("coup : "+to_string(coup)+"/"+to_string(KmaxTimes)+"   score:"+to_string(score));
+        BoiteMessage("coup : "+to_string(coup)+"/"+to_string(KmaxTimes)+"   score:"+to_string(score),"",0);
 
-        BoiteMessage("veuillez selectionner une abscisse");
+        BoiteMessage("veuillez selectionner une abscisse","",0);
         cin >>pos.abs;
         --pos.abs;
         displayGrid(grid,pos);
 
-        BoiteMessage("veuillez selectionner une ordonnée");
+        BoiteMessage("veuillez selectionner une ordonnée","",0);
         cin >>pos.ord;
         --pos.ord;
         displayGrid(grid,pos);
 
-        BoiteMessage("veuillez selectionner un mouvement via les touches a(droite),e(gauche),z(haut),s(bas)");
+        BoiteMessage("veuillez selectionner un mouvement via les touches a(droite),e(gauche),z(haut),s(bas)","",0);
         cin >>moveInstr;
 
         makeAMove(grid,pos,moveInstr);
 
-        if(atLeastThreeInARow(grid,pos,howMany)) removalInRow(grid,pos,howMany);
-        if(atLeastThreeInAColumn(grid,pos,howMany)) removalInColumn(grid,pos,howMany);
+        if(atLeastThreeInARow(grid,pos,howMany)){
+            removalInRow(grid,pos,howMany);
+        }
+        else if(atLeastThreeInAColumn(grid,pos,howMany)){
+            removalInColumn(grid,pos,howMany);
+        }
+        if(infinite){
 
+            completeGrid(grid);
+        }
     }
     return 0;
 }
