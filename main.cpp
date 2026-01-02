@@ -4,6 +4,7 @@
 #include <ctime>
 #include <chrono>
 #include <thread>
+#include <stdio.h>
 using namespace std;
 
 void clearScreen () {
@@ -80,7 +81,11 @@ void  displayGrid (const mat & grid , maposition & pos){
     for (size_t x = 0; x < grid.size(); ++x) {
         for (size_t y = 0; y < grid[x].size(); ++y) {
             if(grid[x][y] <= 0 or grid[x][y] > KNbCandies){
+                if(pos.ord==x and pos.abs==y){
+                    cout<<" [/]";
+                }else{
                 cout<<"  / ";
+                }
             }else{
                 cout<<" ";
                 couleur (couleurs[grid[x][y]]);
@@ -92,8 +97,9 @@ void  displayGrid (const mat & grid , maposition & pos){
                 couleur (KReset);
             }
         }
-        cout<<endl;
+        cout<<endl<<endl;
     }
+    cout<<endl;
 }
 
 void makeAMove (mat & grid, const maposition & pos, const char & direction){
@@ -115,6 +121,17 @@ void makeAMove (mat & grid, const maposition & pos, const char & direction){
     }else{
         cout<<"mauvais indice"<<endl;
         this_thread::sleep_for(chrono::seconds(2));
+    }
+}
+void ChangePosWidthKeyboard(mat & grid, maposition & pos){
+    while(true){
+        char keyboardChar = getchar();
+        if(keyboardChar =='/') break;
+        if(keyboardChar =='z') --pos.ord;
+        if(keyboardChar =='s') ++pos.ord;
+        if(keyboardChar =='a') --pos.abs;
+        if(keyboardChar =='e') ++pos.abs;
+        displayGrid(grid,pos);
     }
 }
 
@@ -178,42 +195,56 @@ void removalInRow (mat & grid, const maposition & pos, unsigned  howMany){
     }
 }
 
-void menu(const string & texte){
-    cout<<"+";
+void BoiteMessage(const string & texte){
+    cout<<"#";
     for(size_t i = 0; i < texte.size();++i){
-        cout<<"-";
+        cout<<"=";
     }
-    cout<<"+"<<endl<<"|";
+    cout<<"#"<<endl<<"|";
     cout<<texte<<"|"<<endl;
-    cout<<"+";
+    cout<<"#";
     for(size_t i = 0; i < texte.size();++i){
-        cout<<"-";
+        cout<<"=";
     }
-    cout<<"+"<<endl;
+    cout<<"#"<<endl;
 }
 
 int main(){
-    menu("    CANDYCROUS  \n|\n|  fait par \n|  Jimmy LEFEVBRE et Lilian CHEVREMONT \n|\n| bonne partie     sae 1.01");
+    BoiteMessage("\tCANDYCROUS\n|\n|\tfait par\n|\tJimmy LEFEVBRE et Lilian CHEVREMONT \n|\n|\tbonne partie\t\t\tsae 1.01");
     this_thread::sleep_for(chrono::seconds(2));
 
     //création de la grille
     mat grid;
     size_t taille = 0;
+    int Mode=0;
+    int Times;
 
-    while(taille < 3){
-        clearScreen ();
-        menu("veuillez choisir une taille");
-        cin >>taille;
-        if(taille < 3){
-            cout<<"taille trop petite"<<endl;
-            this_thread::sleep_for(chrono::seconds(2));
+    while (true) {
+        clearScreen();
+        BoiteMessage("\n\tCANDYCROUS\n\n\tchoisissez votre difficultee\n\t1 - FACILE\n\t2 - NORMAL\n\t3 - DIFFICILE\t");
+        cin>>Mode;
+        if(Mode == 1){
+            taille = 5;
+            Times = (taille*taille)/3;
+            break;
+        }else if(Mode == 2){
+            taille = 10;
+            Times = (taille*taille)/4;
+            break;
+        }else if(Mode == 3){
+            taille = 20;
+            Times = (taille*taille)/10;
+            break;
         }
     }
 
+
     initGrid(grid,taille);
-    const int KmaxTimes = (taille*taille)/3;
+    const int KmaxTimes = Times;
 
     maposition pos;
+    pos.abs=0;
+    pos.ord=0;
     unsigned howMany;
     char moveInstr;
 
@@ -221,18 +252,19 @@ int main(){
 
         displayGrid(grid,pos);
 
-        menu("coup : "+to_string(coup)+"/"+to_string(KmaxTimes)+"   score:"+to_string(score));
+        BoiteMessage("coup : "+to_string(coup)+"/"+to_string(KmaxTimes)+"   score:"+to_string(score));
 
-        menu("veuillez selectionner une abscisse");
+        BoiteMessage("veuillez selectionner une abscisse");
         cin >>pos.abs;
+        --pos.abs;
+        displayGrid(grid,pos);
 
-        menu("veuillez selectionner une ordonnée");
+        BoiteMessage("veuillez selectionner une ordonnée");
         cin >>pos.ord;
+        --pos.ord;
+        displayGrid(grid,pos);
 
-        pos.ord -= 1;
-        pos.abs -= 1;
-
-        menu("veuillez selectionner un mouvement via les touches a(droite),e(gauche),z(haut),s(bas)");
+        BoiteMessage("veuillez selectionner un mouvement via les touches a(droite),e(gauche),z(haut),s(bas)");
         cin >>moveInstr;
 
         makeAMove(grid,pos,moveInstr);
