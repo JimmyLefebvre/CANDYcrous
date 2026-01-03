@@ -237,7 +237,7 @@ int main(){
         BoiteMessage("\n|\tchoisissez votre difficultee\n|\t1 - FACILE\n|\t2 - NORMAL\n|\t3 - DIFFICILE\t\n|\t4 - pour un rappel des regles\t\n","Menu",39);
         Mode=getEntier();
         if(Mode == 4){
-            BoiteMessage("les règles sont simple\n\ttout d'abord vous devez choisir votre mode de jeux\n\tensuite vous verrez une grille de chiffre colorés\n\tceux-ci peuvent disparaitre lorsque vous en aligné 3 ou plus, lorsque vous les faites disparaitre vous gagnez des points\n\tvotre objectif et d'obtenir le score le plus haut, bonne partie!\n","CANDYcrous",40);
+            BoiteMessage("les règles sont simple\n\ttout d'abord vous devez choisir votre mode de jeux\n\tensuite vous verrez une grille de chiffre colores\n\tceux-ci peuvent disparaitre lorsque vous en alignez 3 ou plus, lorsque vous les faites disparaitre vous gagnez des points\n\tvotre objectif et d'obtenir le score le plus haut, bonne partie!\n","CANDYcrous",40);
             this_thread::sleep_for(chrono::seconds(3));
         }else if(Mode == 1){
             taille = 6;
@@ -280,13 +280,13 @@ int main(){
         displayGrid(grid,pos);
 
         BoiteMessage("coup : "+to_string(coup)+"/"+to_string(KmaxTimes)+"   score:"+to_string(score),"",0);
-        BoiteMessage("veuillez selectionner une ordonnée","",0);
+        BoiteMessage("veuillez selectionner une ordonnee","",0);
         pos.ord=getEntier();
         --pos.ord;
         displayGrid(grid,pos);
 
         BoiteMessage("coup : "+to_string(coup)+"/"+to_string(KmaxTimes)+"   score:"+to_string(score),"",0);
-        BoiteMessage("veuillez selectionner un mouvement via les touches a(droite),e(gauche),z(haut),s(bas),/(pour arreter)","",0);
+        BoiteMessage("veuillez selectionner un mouvement via les touches a(gauche),e(droite),z(haut),s(bas),/(pour arreter)","",0);
         cin >>moveInstr;
         if(moveInstr == '/'){
             break;
