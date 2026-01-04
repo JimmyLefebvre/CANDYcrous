@@ -251,7 +251,7 @@ int main(){
         displayAMessage("\n|\tChoisissez votre difficultee\n|\t1 - FACILE\n|\t2 - NORMAL\n|\t3 - DIFFICILE\t\n|\t4 - pour un rappel des regles\t\n","Menu",39);
         Mode=getEntier();
         if(Mode == 4){
-            displayAMessage("Les regles sont simple;\n\t-Tout d'abord vous devez choisir votre mode de jeux\n\t-Ensuite vous verrez une grille de chiffre de couleur\n\t-Ceux-ci disparaissent lorsque vous en alignez 3 ou plus\n\t-Lorsque vous les faites disparaitre, vous gagnez des points\n\t-Votre objectif est d'obtenir le score le plus haut possible, bonne partie!\n","CANDYcrous",40);
+            displayAMessage("Les regles sont simples;\n\t-Tout d'abord vous devez choisir votre mode de jeux\n\t-Ensuite vous verrez une grille de chiffres de couleur\n\t-Ceux-ci disparaissent lorsque vous en alignez 3 ou plus\n\t-Lorsque vous les faites disparaitre, vous gagnez des points\n\t-Votre objectif est d'obtenir le score le plus haut possible, bonne partie!\n","CANDYcrous",40);
             this_thread::sleep_for(chrono::seconds(3));
         }else if(Mode == 1){
             taille = 6;
