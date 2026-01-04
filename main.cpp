@@ -248,10 +248,10 @@ int main(){
 
     while (true) {
         clearScreen();
-        displayAMessage("\n|\tchoisissez votre difficultee\n|\t1 - FACILE\n|\t2 - NORMAL\n|\t3 - DIFFICILE\t\n|\t4 - pour un rappel des regles\t\n","Menu",39);
+        displayAMessage("\n|\tChoisissez votre difficultee\n|\t1 - FACILE\n|\t2 - NORMAL\n|\t3 - DIFFICILE\t\n|\t4 - pour un rappel des regles\t\n","Menu",39);
         Mode=getEntier();
         if(Mode == 4){
-            displayAMessage("les règles sont simple\n\ttout d'abord vous devez choisir votre mode de jeux\n\tensuite vous verrez une grille de chiffre colores\n\tceux-ci peuvent disparaitre lorsque vous en alignez 3 ou plus, lorsque vous les faites disparaitre vous gagnez des points\n\tvotre objectif et d'obtenir le score le plus haut, bonne partie!\n","CANDYcrous",40);
+            displayAMessage("Les règles sont simple;\n\t-Tout d'abord vous devez choisir votre mode de jeux\n\t-Ensuite vous verrez une grille de chiffre de couleur\n\t-Ceux-ci disparaissent lorsque vous en alignez 3 ou plus\n\t-Lorsque vous les faites disparaitre, vous gagnez des points\n\t-Votre objectif est d'obtenir le score le plus haut possible, bonne partie!\n","CANDYcrous",40);
             this_thread::sleep_for(chrono::seconds(3));
         }else if(Mode == 1){
             taille = 6;
@@ -270,7 +270,7 @@ int main(){
 
     while (true) {
         clearScreen();
-        displayAMessage("\n|\tchoisissez votre mode de jeux\n|\t1 - NORMAL\n|\t2 - INFINI\n|\n","Menu",39);
+        displayAMessage("\n|\tChoisissez votre mode de jeux\n|\t1 - NORMAL\n|\t2 - INFINI\n|\n","Menu",39);
         Mode=getEntier();
         if(Mode == 1){
             break;
@@ -288,19 +288,19 @@ int main(){
 
         displayAMessage("coup : "+to_string(coup)+"/"+to_string(KmaxTimes)+"   score:"+to_string(score),"",0);
 
-        displayAMessage("veuillez selectionner une abscisse","",0);
+        displayAMessage("Veuillez selectionner une abscisse","",0);
         pos.abs=getEntier();
         --pos.abs;
         displayGrid(grid,pos);
 
         displayAMessage("coup : "+to_string(coup)+"/"+to_string(KmaxTimes)+"   score:"+to_string(score),"",0);
-        displayAMessage("veuillez selectionner une ordonnee","",0);
+        displayAMessage("Veuillez selectionner une ordonnee","",0);
         pos.ord=getEntier();
         --pos.ord;
         displayGrid(grid,pos);
 
         displayAMessage("coup : "+to_string(coup)+"/"+to_string(KmaxTimes)+"   score:"+to_string(score),"",0);
-        displayAMessage("veuillez selectionner un mouvement via les touches a(gauche),e(droite),z(haut),s(bas),/(pour arreter)","",0);
+        displayAMessage("Veuillez selectionner un mouvement via les touches a(gauche),e(droite),z(haut),s(bas),/(pour arreter)","",0);
         moveInstr = getChar();
         if(moveInstr == '/'){
             break;
@@ -320,6 +320,6 @@ int main(){
             completeGrid(grid);
         }
     }
-    displayAMessage("\n|\tVous avez fini votre partie avec "+to_string(coup)+" coup ce qui vous fait un score de "+to_string(score)+"\t|\n|\n|\t (n'hesitez pas a tester d'autres difficultees)\n","!FINI!",0);
+    displayAMessage("\n|\tVous avez fini votre partie avec "+to_string(coup)+" coups ce qui vous fait un score de "+to_string(score)+"\t|\n|\n|\t (n'hesitez pas a tester d'autres difficultees)\n","!FINI!",0);
     return 0;
 }
