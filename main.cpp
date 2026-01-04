@@ -124,16 +124,16 @@ void makeAMove (mat & grid, const maposition & pos, const char & direction){
 
     if (pos.abs < grid.size() && pos.ord < grid[pos.abs].size()){
         ++coup;
-        if(tolower(direction) == 's' && pos.ord < grid.size() - 1){
+        if(tolower(direction) == 's' && pos.ord < grid.size() - 1 && grid[pos.ord+1][pos.abs] != 0){
             swap(grid[pos.ord][pos.abs],grid[pos.ord + 1][pos.abs]);
-        }else if(tolower(direction) == 'z' && pos.ord > 0){
+        }else if(tolower(direction) == 'z' && pos.ord > 0 && grid[pos.ord-1][pos.abs] != 0){
             swap(grid[pos.ord][pos.abs],grid[pos.ord - 1][pos.abs]);
-        }else if(tolower(direction) == 'a' && pos.abs > 0){
+        }else if(tolower(direction) == 'a' && pos.abs > 0 && grid[pos.ord][pos.abs-1] != 0){
             swap(grid[pos.ord][pos.abs],grid[pos.ord][pos.abs - 1]);
-        }else if(tolower(direction) == 'e' && pos.abs < grid.size()-1){
+        }else if(tolower(direction) == 'e' && pos.abs < grid.size()-1 && grid[pos.ord][pos.abs+1] != 0){
             swap(grid[pos.ord][pos.abs],grid[pos.ord][pos.abs + 1]);
         }else{
-            cout<<"key error"<<endl;
+            cout<<"mauvais instruction"<<endl;
             this_thread::sleep_for(chrono::seconds(2));
         }
     }else{
