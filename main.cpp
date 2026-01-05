@@ -20,7 +20,7 @@ const unsigned KBleu    (44);
 const unsigned KMAgenta (45);
 const unsigned KCyan    (46);
 
-//création de la liste qui li couleur et numéros de cases
+//création de la liste qui lit les couleurs et les numéros de cases
 vector<unsigned> couleurs ={KNoir,KRouge,KVert,KJaune,KBleu,KMAgenta,KCyan};
 
 //valeur maximale des cases
@@ -29,7 +29,7 @@ const unsigned int KNbCandies = 6;
 //valeur des cases retirées
 const unsigned Kimpossible = 0;
 
-//variable demander pour le bon fonctionnement du jeux
+//variable demandées pour le bon fonctionnement du jeu
 int coup = 0;
 int score = 0;
 bool infinite = false;
@@ -43,7 +43,7 @@ struct maposition {
     unsigned ord;
 };
 
-// variable contenant les cases qui ne peuvent pas être déplacées
+// variable contenant les cases qui ne peuvent pas être déplaçées
 vector<maposition> UnmoovableBlock;
 
 inline bool operator==(const maposition& a, const maposition& b) noexcept {
@@ -78,7 +78,7 @@ int getEntier(){
             intRenvoye=stoi(str);
             return intRenvoye;
         }else{
-            cout<<"la valeur n'est pas valide"<<endl;
+            cout<<"La valeur n'est pas valide"<<endl;
         }
     }
 }
@@ -93,7 +93,7 @@ char getChar(){
             charRenvoye = str[0];
             return tolower(charRenvoye);
         }else{
-            cout<<"la valeur n'est pas valide"<<endl;
+            cout<<"La valeur n'est pas valide"<<endl;
         }
     }
 }
@@ -250,7 +250,7 @@ void removalInRow (mat & grid, const maposition & pos, unsigned  howMany){
     }
 }
 
-// fonction d'affichage des menu et textes importants pour le jeux
+// fonction d'affichage des menu et textes importants pour le jeu
 void displayAMessage(const string & texte,const string & title,size_t size){
     if(size == 0)size = texte.size();
     cout<<"#="<<title;
@@ -293,7 +293,7 @@ int main(){
     char moveInstr;
 
     //menu 1
-    displayAMessage("\n|\tfait par\n|\tJimmy LEFEVBRE et Lilian CHEVREMONT G2\n|\n|\tbonne partie\t\tsae 1.01\n","CANDYcrous",50);
+    displayAMessage("\n|\tFait par\n|\tJimmy LEFEBVRE et Lilian CHEVREMONT G2\n|\n|\tBonne partie\t\tsae 1.01\n","CANDYcrous",50);
     this_thread::sleep_for(chrono::seconds(2));
 
 
@@ -305,7 +305,7 @@ int main(){
             displayAMessage("\n|\tChoisissez votre difficultee\n|\t1 - FACILE\n|\t2 - NORMAL\n|\t3 - DIFFICILE\t\n|\t4 - Rappel des regles\t\n","Menu",39);
             Mode=getEntier();
             if(Mode == 4){
-                displayAMessage("Les regles sont simples:\n|\t-Tout d'abord vous devez choisir votre mode de jeux\n|\t-Ensuite vous verrez une grille de chiffres de couleur\n|\t-Ceux-ci disparaissent lorsque vous en alignez 3 ou plus\n|\t-Lorsque vous les faites disparaitre, vous gagnez des points\n|\t-Votre objectif est d'obtenir le score le plus haut possible, bonne partie!\n","CANDYcrous",90);
+                displayAMessage("Les regles sont simples:\n|\t-Tout d'abord vous devez choisir votre mode de jeu\n|\t-Ensuite vous verrez une grille de chiffres de couleur\n|\t-Ceux-ci disparaissent lorsque vous en alignez 3 ou plus\n|\t-Lorsque vous les faites disparaitre, vous gagnez des points\n|\t-Votre objectif est d'obtenir le score le plus haut possible, bonne partie!\n","CANDYcrous",90);
                 this_thread::sleep_for(chrono::seconds(7));
             }else if(Mode == 1){
                 taille = 6;
@@ -323,7 +323,7 @@ int main(){
         }
         //initialisation de la grille
         initGrid(grid,taille);
-        //maximum de coup
+        //maximum de coups
         const int KmaxTimes = Times;
 
         //menu 2
@@ -396,7 +396,7 @@ int main(){
             }else if(rePlay == 'y'){
                 break;
             }
-            cout<<"veuillez choisir entre y et n"<<endl;
+            cout<<"Veuillez choisir entre y et n"<<endl;
         }
     }
 }
